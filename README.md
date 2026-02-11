@@ -2,7 +2,7 @@
 
 > Level 1.1: Professional developer portfolio built with Astro 5, Tailwind CSS, and MDX
 
-[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://portfolio.davidfdzmorilla.dev)
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://webdev.davidfdzmorilla.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ## 🚀 Project Overview
@@ -130,12 +130,45 @@ This project adheres to strict quality gates:
 
 ## 🌐 Deployment
 
-Deployed to [portfolio.davidfdzmorilla.dev](https://portfolio.davidfdzmorilla.dev) via:
+Deployed to [webdev.davidfdzmorilla.dev](https://webdev.davidfdzmorilla.dev) via:
 
 1. Multi-stage Docker build (Node.js → Nginx)
-2. Docker Compose on Hetzner VPS
-3. Nginx reverse proxy on host
-4. Cloudflare DNS + CDN + SSL
+2. Docker Compose on Hetzner VPS (port 3001)
+3. Nginx reverse proxy with SSL (Let's Encrypt)
+4. Cloudflare DNS + CDN
+
+### Production Setup
+
+**Server**: Hetzner CX32 (Ubuntu 24.04, 4 vCPU, 8GB RAM)
+
+**SSL Certificate**: Let's Encrypt (auto-renewal via certbot)
+
+**Nginx Configuration**:
+
+```nginx
+# HTTP → HTTPS redirect
+server {
+    listen 80;
+    server_name webdev.davidfdzmorilla.dev;
+    return 301 https://$server_name$request_uri;
+}
+
+# HTTPS with SSL
+server {
+    listen 443 ssl http2;
+    server_name webdev.davidfdzmorilla.dev;
+    ssl_certificate /etc/letsencrypt/live/webdev.davidfdzmorilla.dev/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/webdev.davidfdzmorilla.dev/privkey.pem;
+
+    location / {
+        proxy_pass http://localhost:3001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
 
 ## 📝 Development Workflow
 
@@ -168,12 +201,13 @@ MIT License - see [LICENSE](LICENSE) for details
 
 ## 🔗 Links
 
-- **Live Site**: https://portfolio.davidfdzmorilla.dev
+- **Live Site**: https://webdev.davidfdzmorilla.dev
 - **GitHub**: https://github.com/davidfdzmorilla/webdev-portfolio
 - **Author**: davidfdzmorilla
 
 ---
 
-**Status**: ⚙️ In Development  
+**Status**: ✅ Production  
 **Level**: 1.1 (Fundamentals)  
-**Started**: 2025-02-11
+**Started**: 2026-02-11  
+**Deployed**: 2026-02-11
