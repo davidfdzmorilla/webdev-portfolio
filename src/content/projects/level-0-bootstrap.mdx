@@ -1,0 +1,140 @@
+---
+title: 'Level 0: Bootstrap & Infrastructure'
+description: "Initial setup of WebDev's autonomous development environment on Hetzner VPS with essential tooling and configuration."
+pubDate: 2025-02-10
+tags: ['infrastructure', 'devops', 'setup', 'level-0']
+featured: false
+stack: ['Ubuntu 24.04', 'Node.js 22', 'Docker', 'Nginx', 'Cloudflare']
+status: 'completed'
+---
+
+## Overview
+
+The foundation phase of WebDev's autonomous journey: provisioning and configuring a production-ready development environment on a Hetzner CX32 VPS.
+
+## Infrastructure
+
+### Server Specifications
+
+- **Provider**: Hetzner Cloud
+- **Instance**: CX32 (4 vCPU, 8GB RAM)
+- **OS**: Ubuntu 24.04 LTS
+- **IP**: 46.225.106.199
+- **Domain**: davidfdzmorilla.dev (via Cloudflare)
+
+### Core Tools Installed
+
+- **Runtime**: Node.js 22 (LTS)
+- **Package Manager**: pnpm 10
+- **Containerization**: Docker + Docker Compose
+- **Web Server**: Nginx (reverse proxy)
+- **Version Control**: Git (configured for GitHub)
+- **DNS Management**: Cloudflare API integration
+
+## Configuration
+
+### Git Setup
+
+- User: WebDev Agent
+- Email: webdev@davidfdzmorilla.dev
+- Provider: GitHub (davidfdzmorilla)
+- Default branch: develop
+- Protected branches: main
+
+### Directory Structure
+
+```
+~/projects/          # All project repositories
+~/scripts/           # Automation scripts
+~/logs/daily/        # Daily activity logs
+~/.openclaw/         # OpenClaw configuration
+```
+
+### Environment Variables
+
+- `GIT_TOKEN`: GitHub personal access token
+- `CLOUDFLARE_API_TOKEN`: DNS management
+- `CLOUDFLARE_ZONE_ID`: Domain zone identifier
+- `SERVER_IP`: Public IP address
+
+## DNS Configuration
+
+All projects are deployed to subdomains:
+
+- `portfolio.davidfdzmorilla.dev` → Portfolio (Level 1.1)
+- `blog.davidfdzmorilla.dev` → Blog (Level 1.2, planned)
+- Future projects follow same pattern
+
+Cloudflare provides:
+
+- Automatic SSL/TLS certificates
+- Global CDN
+- DDoS protection
+- Analytics
+
+## Deployment Strategy
+
+### Docker Workflow
+
+1. Build multi-stage Docker images
+2. Expose on unique ports (3001+)
+3. Configure Nginx reverse proxy on host
+4. Point Cloudflare DNS to server IP
+5. Cloudflare handles SSL termination
+
+### Nginx Reverse Proxy Pattern
+
+```nginx
+server {
+    listen 80;
+    server_name subdomain.davidfdzmorilla.dev;
+
+    location / {
+        proxy_pass http://localhost:PORT;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+## Automation
+
+### Cloudflare DNS Script
+
+Created `~/scripts/cloudflare-dns.sh` for automated DNS record creation:
+
+- Create A records
+- Update existing records
+- List all records
+- Delete records
+
+### Progress Tracking
+
+`~/projects/PROGRESS.json` maintains state:
+
+- Current level and project
+- Commit/PR counts
+- Milestones completed
+- Test coverage
+
+## Security
+
+- SSH key-based authentication
+- Firewall configured (ufw)
+- Automatic security updates enabled
+- Non-root user for operations
+- Git token with minimal required scopes
+
+## Lessons Learned
+
+- **Infrastructure as Code**: Manual setup works, but automation is next
+- **DNS propagation**: Cloudflare is near-instant with API
+- **Docker networking**: Host mode simplifies reverse proxy setup
+- **pnpm efficiency**: Much faster than npm, disk-efficient
+
+## Next Steps
+
+- Implement automated backups
+- Add monitoring (Prometheus/Grafana)
+- Set up CI/CD pipelines
+- Harden security further (fail2ban, etc.)
