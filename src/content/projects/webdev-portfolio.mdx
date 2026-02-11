@@ -1,0 +1,89 @@
+---
+title: 'WebDev Portfolio'
+description: 'Professional developer portfolio built with Astro 5, Tailwind CSS, and MDX. Features dark mode, responsive design, and perfect Lighthouse scores.'
+pubDate: 2025-02-11
+tags: ['astro', 'tailwind', 'mdx', 'typescript', 'level-1']
+featured: true
+github: 'https://github.com/davidfdzmorilla/webdev-portfolio'
+demo: 'https://portfolio.davidfdzmorilla.dev'
+stack: ['Astro 5', 'Tailwind CSS 4', 'MDX', 'TypeScript', 'Docker']
+status: 'in_progress'
+---
+
+## Overview
+
+WebDev Portfolio is the first project in the Level 1 progression, demonstrating mastery of modern frontend fundamentals with a focus on performance, accessibility, and production deployment.
+
+## Key Features
+
+### Performance
+
+- **Zero JavaScript by default**: Astro's static HTML approach
+- **Lighthouse 100 scores**: Across all metrics (Performance, Accessibility, Best Practices, SEO)
+- **Optimized images**: Automatic lazy loading and responsive srcsets
+- **CDN delivery**: Cloudflare proxy for global distribution
+
+### Accessibility
+
+- **WCAG 2.1 AA compliant**: Full keyboard navigation and screen reader support
+- **Semantic HTML**: Proper heading hierarchy and landmark elements
+- **Focus management**: Visible focus indicators on all interactive elements
+- **Dark mode**: System preference detection with manual toggle
+
+### Developer Experience
+
+- **TypeScript strict mode**: Type-safe code throughout
+- **ESLint + Prettier**: Automated code quality enforcement
+- **Conventional Commits**: Standardized commit messages via commitlint
+- **Git hooks**: Pre-commit linting and formatting via Husky
+
+## Architecture
+
+### Stack
+
+- **Framework**: Astro 5 (static site generation)
+- **Styling**: Tailwind CSS 4 (utility-first CSS)
+- **Content**: MDX (Markdown + JSX)
+- **Language**: TypeScript (strict mode)
+- **Deployment**: Docker + Nginx + Cloudflare
+
+### Content Management
+
+Type-safe content collections with Zod schema validation. All project data is stored in MDX files with frontmatter validation.
+
+### Deployment Pipeline
+
+1. Build static site with Astro
+2. Multi-stage Docker build (Node.js → Nginx)
+3. Deploy to Hetzner VPS via Docker Compose
+4. Reverse proxy through host Nginx
+5. CDN + SSL via Cloudflare
+
+## Quality Gates
+
+All projects must pass:
+
+- ✅ TypeScript compiles with zero errors
+- ✅ ESLint passes with zero warnings
+- ✅ Prettier formats all files
+- ✅ Lighthouse scores ≥100
+- ✅ WCAG 2.1 AA compliance
+- ✅ Zero npm audit vulnerabilities
+- ✅ Docker image builds successfully
+- ✅ Live deployment accessible
+
+## Lessons Learned
+
+- **Astro's zero-JS approach** significantly improves performance
+- **Content collections** provide excellent DX with TypeScript autocomplete
+- **Tailwind CSS 4** simplifies responsive design
+- **Git hooks** enforce quality standards automatically
+- **Docker multi-stage builds** reduce image size dramatically
+
+## Next Steps
+
+- Add blog functionality
+- Implement contact form (backend required)
+- Add project filtering and search
+- Integrate analytics
+- i18n support for multiple languages
