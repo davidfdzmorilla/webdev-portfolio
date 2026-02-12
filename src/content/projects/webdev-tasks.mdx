@@ -1,0 +1,97 @@
+---
+title: 'Task Management App'
+description: 'Full-featured task manager with authentication, categories, priorities, and due dates. Built with Next.js 15 and PostgreSQL.'
+pubDate: 2026-02-12
+level: '2.1'
+status: 'completed'
+featured: true
+tags: ['Next.js', 'PostgreSQL', 'TypeScript', 'Better-Auth', 'Level 2']
+stack:
+  - 'Next.js 15'
+  - 'PostgreSQL 17'
+  - 'Drizzle ORM'
+  - 'Better-Auth'
+  - 'TypeScript'
+  - 'Tailwind CSS 4'
+  - 'Docker'
+github: 'https://github.com/davidfdzmorilla/webdev-tasks'
+demo: 'https://tasks.davidfdzmorilla.dev'
+---
+
+## Overview
+
+A production-ready task management application with user authentication, task organization by categories, priority levels, and due dates. First full-stack project with database and auth.
+
+## Key Features
+
+- 🔐 **User Authentication**: Email/password with Better-Auth
+- ✅ **Task Management**: Create, update, delete, complete tasks
+- 🏷️ **Categories & Tags**: Organize tasks by custom categories
+- 🎯 **Priority Levels**: Low, medium, high priority tasks
+- 📅 **Due Dates**: Set and track task deadlines
+- 📊 **Status Tracking**: Todo, in progress, done
+- 🌓 **Dark Mode**: Full theme support
+
+## Technical Highlights
+
+### Authentication Deep Dive
+
+Implemented Better-Auth with Drizzle ORM, requiring careful schema design:
+
+- Text-based IDs (not UUIDs) per Better-Auth requirements
+- Proper session management with tokens
+- Password hashing and validation
+- Logout functionality with JSON API calls
+
+### Database Design
+
+- PostgreSQL 17 with Drizzle ORM
+- Type-safe queries with TypeScript
+- Foreign key relationships (users → tasks → categories)
+- Proper indexing for performance
+
+### Server Actions
+
+- Next.js 15 Server Actions for data mutations
+- Type-safe API with Zod validation
+- Optimistic UI updates
+- Error handling patterns
+
+## Debugging Battle Story
+
+This project required extensive debugging (3+ hours, 11 rebuilds) to resolve Better-Auth integration issues:
+
+1. **Drizzle ORM Version**: Required downgrade from 0.45.x to 0.41.0
+2. **ID Types**: Better-Auth uses text IDs, not UUIDs
+3. **Schema Fields**: Required specific fields (password, token, timestamps)
+4. **Docker Volumes**: Needed `docker compose down -v` when changing ID types
+5. **Logout API**: Required JSON Content-Type, not form-urlencoded
+
+All issues documented in README for future developers.
+
+## Stack Details
+
+- **Frontend**: Next.js 15 App Router, React 19, Tailwind CSS 4
+- **Backend**: Next.js Server Actions, Node.js 22
+- **Database**: PostgreSQL 17 with Drizzle ORM 0.41.0
+- **Auth**: Better-Auth 1.4.18
+- **Deployment**: Docker Compose, Nginx, Let's Encrypt
+
+## Quality Gates
+
+✅ All passing:
+
+- TypeScript strict mode: Zero errors
+- ESLint: Zero warnings
+- Production build: Success
+- Authentication: Fully functional
+- Docker build: Multi-stage optimization
+
+## Lessons Learned
+
+- Always check auth library peerDependencies for ORM versions
+- Text IDs vs UUIDs matter for third-party integrations
+- Better-Auth requires comprehensive schema (not just basics)
+- Docker volumes persist schema changes—delete when needed
+- Client-side logout needs proper JSON Content-Type
+- Comprehensive documentation saves hours of future debugging

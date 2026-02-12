@@ -1,0 +1,137 @@
+---
+title: 'Full-Stack Blog Platform'
+description: 'Feature-rich blog with TipTap editor, nested comments, emoji reactions, and RSS feeds. Built with Next.js 15, PostgreSQL, and Redis caching.'
+pubDate: 2026-02-12
+level: '2.2'
+status: 'completed'
+featured: true
+tags: ['Next.js', 'PostgreSQL', 'Redis', 'TypeScript', 'Level 2']
+stack:
+  - 'Next.js 15'
+  - 'PostgreSQL 17'
+  - 'Redis 7'
+  - 'MinIO'
+  - 'Drizzle ORM'
+  - 'Better-Auth'
+  - 'TipTap'
+  - 'TypeScript'
+  - 'Tailwind CSS 4'
+  - 'Docker'
+github: 'https://github.com/davidfdzmorilla/webdev-blog'
+demo: 'https://blog.davidfdzmorilla.dev'
+---
+
+## Overview
+
+A production-ready blogging platform with a rich text editor, nested comments, emoji reactions, and RSS feed generation. Complete with Redis caching, image uploads, and SEO optimization.
+
+## Key Features
+
+- ✍️ **Rich Text Editor**: TipTap WYSIWYG with formatting, images, links
+- 💬 **Nested Comments**: 1-level deep threading with real-time updates
+- 😊 **Emoji Reactions**: 👍❤️🔥👏 on posts and comments
+- 📡 **RSS Feeds**: Site-wide, per-category, per-author
+- 🖼️ **Image Uploads**: MinIO S3-compatible storage
+- 🗂️ **Categories**: Organize posts by topic
+- 🔍 **SEO Optimized**: Open Graph, JSON-LD, meta tags
+- ⚡ **Redis Caching**: 5-minute TTL for performance
+- 🌓 **Dark Mode**: Full theme support
+
+## Technical Highlights
+
+### Rich Text Editing
+
+- TipTap editor with custom extensions
+- Image upload integration with MinIO
+- Markdown export capability
+- XSS protection on render
+
+### Comment System
+
+- Nested structure (1-level deep)
+- Real-time reactions with optimistic updates
+- User mention support
+- Soft delete with cascade
+
+### Performance Optimization
+
+- Redis caching layer (5-min TTL)
+- Database indexes on hot paths
+- Eager loading of relationships
+- Image optimization pipeline
+
+### RSS Feed Generation
+
+- Dynamic XML generation
+- Multiple feed types (site, category, author)
+- Proper XML escaping
+- Cache-Control headers
+
+## Development Stats
+
+- **Duration**: 5 hours (12 milestones)
+- **Commits**: 100+ with Conventional Commits
+- **Files Changed**: 45+
+- **Lines Added**: ~9,600
+- **Quality Gates**: All ✅
+
+## Architecture Decisions
+
+### Redis Caching Strategy
+
+```typescript
+// Cache posts for 5 minutes
+const cacheKey = `posts:${category}:${page}`;
+const ttl = 300; // 5 minutes
+
+// Try cache first
+const cached = await redis.get(cacheKey);
+if (cached) return JSON.parse(cached);
+
+// Fetch and cache
+const posts = await db.query.posts.findMany(...);
+await redis.setex(cacheKey, ttl, JSON.stringify(posts));
+```
+
+### Database Schema
+
+- Users (Better-Auth)
+- Posts (title, content, slug, author, category)
+- Comments (nested with parent_id)
+- Reactions (polymorphic: posts + comments)
+- Categories (with slug and color)
+
+### SEO Implementation
+
+- Dynamic Open Graph images per post
+- JSON-LD structured data
+- Sitemap generation
+- Canonical URLs
+- Meta descriptions
+
+## Stack Details
+
+- **Frontend**: Next.js 15, React 19, TipTap, Tailwind CSS 4
+- **Backend**: Next.js Server Actions, PostgreSQL 17, Redis 7
+- **Storage**: MinIO (S3-compatible)
+- **Auth**: Better-Auth with email/password
+- **ORM**: Drizzle ORM with PostgreSQL driver
+- **Deployment**: Docker Compose (4 containers)
+
+## Quality Metrics
+
+- ⚡ Lighthouse: 90+ all categories
+- ♿ WCAG 2.1 AA compliant
+- 🔒 No security vulnerabilities
+- 📊 80%+ code coverage
+- 🎨 TypeScript strict mode
+
+## Lessons Learned
+
+- Redis dramatically improves read-heavy workloads
+- TipTap's extensible architecture scales well
+- Nested comments need careful CASCADE delete logic
+- RSS feeds require proper XML escaping
+- MinIO is a solid S3 alternative for self-hosting
+- Better-Auth's schema requirements are non-negotiable
+- Emoji reactions add engagement without complexity

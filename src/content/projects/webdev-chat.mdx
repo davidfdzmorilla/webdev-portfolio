@@ -1,0 +1,186 @@
+---
+title: 'Real-Time Chat Platform'
+description: 'Production-ready chat app with Socket.io, Redis pub/sub, presence indicators, and room management. Fully scalable architecture.'
+pubDate: 2026-02-12
+level: '2.3'
+status: 'completed'
+featured: true
+tags: ['Next.js', 'Socket.io', 'Redis', 'WebSocket', 'Level 2']
+stack:
+  - 'Next.js 15'
+  - 'Socket.io 4.8'
+  - 'PostgreSQL 17'
+  - 'Redis 7'
+  - 'MinIO'
+  - 'Drizzle ORM'
+  - 'Better-Auth'
+  - 'TypeScript'
+  - 'Tailwind CSS 4'
+  - 'Docker'
+github: 'https://github.com/davidfdzmorilla/webdev-chat'
+demo: 'https://chat.davidfdzmorilla.dev'
+---
+
+## Overview
+
+A real-time chat application with WebSocket support, room management, online presence indicators, and Redis pub/sub for horizontal scalability. Completed in 1 hour 45 minutes with 9 commits.
+
+## Key Features
+
+- 💬 **Real-Time Messaging**: Instant delivery via Socket.io
+- 🏠 **Room Management**: Create, join, leave chat rooms
+- 👥 **Online Presence**: Live user status indicators
+- 🔄 **Horizontal Scaling**: Redis pub/sub for multi-instance
+- 📁 **File Sharing**: Ready infrastructure (MinIO)
+- 🔐 **Authentication**: Better-Auth integration
+- 📜 **Message History**: Persistent chat logs
+- 🌓 **Dark Mode**: Full theme support
+
+## Technical Highlights
+
+### WebSocket Architecture
+
+```typescript
+// Server: Socket.io with Redis adapter
+io.adapter(createAdapter(pubClient, subClient));
+
+io.on('connection', (socket) => {
+  socket.on('join:room', async (roomId) => {
+    socket.join(roomId);
+    io.to(roomId).emit('user:joined', { userId });
+  });
+
+  socket.on('send:message', async (data) => {
+    await saveMessage(data);
+    io.to(data.roomId).emit('new:message', message);
+  });
+});
+```
+
+### Redis Pub/Sub for Scaling
+
+- Multiple app instances can run simultaneously
+- Redis handles message broadcasting across instances
+- Session affinity not required
+- Load balancer can distribute freely
+
+### Presence System
+
+- Socket connection tracking
+- Join/leave room events
+- Online/offline indicators
+- Real-time UI updates
+
+## Development Timeline
+
+Completed in **1h 45min** across 8 milestones:
+
+1. **M1**: Setup (DB schema, Docker, Redis, MinIO) - 15min
+2. **M2**: Authentication (Better-Auth) - 15min
+3. **M3**: Rooms (create, list, join, leave) - 20min
+4. **M4**: Messages (send, receive, history) - 20min
+5. **M5**: WebSockets (Socket.io + Redis) - 15min
+6. **M6**: Presence (online indicators) - 10min
+7. **M7**: Files (skipped - infra ready) - 0min
+8. **M8**: Deployment (Makefile, Nginx, docs) - 10min
+
+Total commits: **9**
+
+## Architecture Decisions
+
+### Why Socket.io over WebSocket API?
+
+- Automatic reconnection
+- Fallback to long-polling
+- Room management built-in
+- Redis adapter for scaling
+- Better error handling
+
+### Horizontal Scaling Strategy
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  Instance 1 │────▶│    Redis    │◀────│  Instance 2 │
+│  (Socket.io)│     │  (Pub/Sub)  │     │  (Socket.io)│
+└─────────────┘     └─────────────┘     └─────────────┘
+       │                                        │
+       └────────────────┬───────────────────────┘
+                        │
+                  ┌─────▼──────┐
+                  │  Nginx LB  │
+                  └────────────┘
+```
+
+### Database Schema
+
+- **rooms**: Chat room metadata
+- **messages**: Message content + timestamps
+- **room_members**: Many-to-many (users ↔ rooms)
+- **users**: Better-Auth schema
+
+## Stack Details
+
+- **Frontend**: Next.js 15 App Router, Socket.io client
+- **Backend**: Node.js 22, Socket.io server, Express
+- **Real-Time**: Socket.io 4.8 with Redis adapter
+- **Database**: PostgreSQL 17, Drizzle ORM
+- **Cache**: Redis 7 (pub/sub + session store)
+- **Storage**: MinIO (file sharing ready)
+- **Auth**: Better-Auth
+- **Deployment**: Docker Compose (5 containers)
+
+## Code Quality
+
+- ✅ TypeScript strict mode
+- ✅ ESLint + Prettier
+- ✅ Conventional Commits
+- ✅ Husky + commitlint
+- ✅ Production-ready error handling
+
+## Performance Considerations
+
+1. **Redis Pub/Sub**: Enables horizontal scaling
+2. **Message Pagination**: Limit history queries
+3. **Connection Pooling**: PostgreSQL connections
+4. **WebSocket Compression**: Enabled by default
+5. **Room-based Broadcasting**: Only to room members
+
+## Deployment
+
+### Docker Compose Services
+
+```yaml
+services:
+  app: # Next.js + Socket.io server
+  postgres: # PostgreSQL 17
+  redis: # Redis 7 (pub/sub + cache)
+  minio: # S3-compatible storage
+  nginx: # Reverse proxy (host machine)
+```
+
+### Infrastructure
+
+- Hetzner CX32 VPS (ARM64)
+- Ubuntu 24.04 LTS
+- Docker multi-stage builds
+- Cloudflare CDN + SSL
+- Let's Encrypt certificates
+
+## Lessons Learned
+
+- Socket.io's Redis adapter makes scaling trivial
+- Presence systems need careful connection/disconnection handling
+- Room-based broadcasting is more efficient than user-based
+- Docker networking requires proper service names
+- Redis pub/sub is simpler than NATS for small scale
+- File uploads need separate strategy for WebSockets
+- Better-Auth schema must be consistent across projects
+
+## Future Enhancements
+
+- [ ] File sharing implementation (MinIO ready)
+- [ ] Direct messages (1-on-1 chats)
+- [ ] Message reactions
+- [ ] Typing indicators
+- [ ] Read receipts
+- [ ] Push notifications
