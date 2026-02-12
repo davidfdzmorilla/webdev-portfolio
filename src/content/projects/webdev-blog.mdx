@@ -69,11 +69,13 @@ A production-ready blogging platform with a rich text editor, nested comments, e
 
 ## Development Stats
 
-- **Duration**: 5 hours (12 milestones)
-- **Commits**: 100+ with Conventional Commits
-- **Files Changed**: 45+
-- **Lines Added**: ~9,600
+- **Duration**: 7+ hours (12 milestones + auth debugging)
+- **Commits**: 110+ with Conventional Commits
+- **Files Changed**: 47
+- **Lines Added**: ~9,800
 - **Quality Gates**: All ✅
+- **Rebuilds**: 15+ (auth middleware fixes)
+- **Final Version**: v1.0.0
 
 ## Architecture Decisions
 
@@ -133,5 +135,9 @@ await redis.setex(cacheKey, ttl, JSON.stringify(posts));
 - Nested comments need careful CASCADE delete logic
 - RSS feeds require proper XML escaping
 - MinIO is a solid S3 alternative for self-hosting
-- Better-Auth's schema requirements are non-negotiable
+- **Better-Auth's schema requirements are non-negotiable**
 - Emoji reactions add engagement without complexity
+- **Production HTTPS cookies use `__Secure-` prefix** (middleware must match)
+- Sign out requires JSON, not form-urlencoded (use client component)
+- Server-side session checks more reliable than client-side hooks
+- Database timestamps must be handled carefully in serialization
