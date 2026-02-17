@@ -1,12 +1,23 @@
 ---
 title: 'Offline-First Collaborative Notes'
-description: 'A local-first notes app with real-time collaboration powered by Yjs CRDTs and WebSocket sync'
-url: 'https://notes.davidfdzmorilla.dev'
-github: 'https://github.com/davidfdzmorilla/webdev-local-first'
-level: 7
+description: 'A local-first notes app with real-time collaboration powered by Yjs CRDTs and WebSocket sync. Notes work 100% offline and sync automatically when online.'
+pubDate: 2026-02-17
 tags: ['Next.js', 'Yjs', 'CRDT', 'WebSocket', 'Tiptap', 'IndexedDB', 'TypeScript', 'Docker']
-status: 'live'
-date: '2026-02-17'
+featured: true
+github: 'https://github.com/davidfdzmorilla/webdev-local-first'
+demo: 'https://notes.davidfdzmorilla.dev'
+status: 'completed'
+stack:
+  [
+    'Next.js 15',
+    'TypeScript',
+    'Yjs',
+    'y-indexeddb',
+    'y-websocket',
+    'Tiptap',
+    'Tailwind CSS',
+    'Docker',
+  ]
 ---
 
 ## Offline-First Collaborative Notes
@@ -23,24 +34,7 @@ A production-ready notes application built with **local-first** architecture, wh
 
 ### Architecture
 
-```
-Browser                          VPS Server
-├── Yjs Doc (in-memory)          ├── Next.js 15 App
-├── y-indexeddb (offline)        └── y-websocket relay
-├── Tiptap editor                    (port 3015)
-└── WebsocketProvider ─────────────────────────►
-```
-
-### Tech Stack
-
-| Component        | Technology                           |
-| ---------------- | ------------------------------------ |
-| Frontend         | Next.js 15, TypeScript, Tailwind CSS |
-| CRDT Engine      | Yjs                                  |
-| Offline Storage  | y-indexeddb (IndexedDB)              |
-| Real-time Sync   | y-websocket, custom WS server        |
-| Rich Text Editor | Tiptap with Collaboration extension  |
-| Deployment       | Docker Compose, Nginx                |
+The app uses a custom Next.js server that embeds a WebSocket server for Yjs sync. The browser uses IndexedDB for offline persistence and WebSockets for real-time sync when online.
 
 ### How CRDTs Work Here
 
