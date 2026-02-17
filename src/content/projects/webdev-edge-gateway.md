@@ -1,12 +1,13 @@
 ---
-title: 'Edge Gateway'
-description: 'Production-grade intelligent API Gateway with rate limiting, circuit breaker, A/B testing, JWT verification, and Prometheus observability.'
-tech: ['TypeScript', 'Fastify', 'Redis', 'Docker', 'Prometheus']
-url: 'https://gateway.davidfdzmorilla.dev'
+title: 'Intelligent API Gateway'
+description: 'Production-grade API Gateway with Redis rate limiting, circuit breaker, A/B testing, JWT verification, and Prometheus observability. Built with Fastify and TypeScript.'
+pubDate: 2026-02-17
+tags: ['fastify', 'redis', 'typescript', 'docker', 'prometheus', 'api-gateway', 'circuit-breaker']
+featured: true
 github: 'https://github.com/davidfdzmorilla/webdev-edge-gateway'
-date: '2026-02-17'
-level: 7
-status: 'live'
+demo: 'https://gateway.davidfdzmorilla.dev'
+status: 'completed'
+stack: ['Fastify', 'TypeScript', 'Redis', 'Prometheus', 'Docker', 'Nginx']
 ---
 
 ## Overview
@@ -55,15 +56,6 @@ Internet → gateway.davidfdzmorilla.dev
   ├── Proxy to upstream service
   └── Prometheus metrics recording
 ```
-
-## Tech Stack
-
-- **Fastify** — High-performance Node.js web framework
-- **ioredis** — Redis client for rate limiting and circuit breaker state
-- **jose** — JWT verification
-- **prom-client** — Prometheus metrics
-- **TypeScript strict** — Full type safety
-- **Docker Compose** — Container deployment
 
 ## API Endpoints
 
